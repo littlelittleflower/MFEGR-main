@@ -930,9 +930,8 @@ class DCNE(KGEModel):
         self.act = torch.tanh
 
         #原始信息
-        # self.num_entity = 55331#ace暂定
-        self.num_entity = 58236#52947#20492#ere暂定
-        self.num_event = 40743#5301#18888#暂定,有问题的
+        self.num_entity = 58236
+        self.num_event = 40743
         self.num_relation = num_relation
         self.time_size = 14763
         rank = 100
@@ -1099,8 +1098,7 @@ class DCNE(KGEModel):
     def forward_base(self, syml,sub, rel, sub_index_list, init_ent_list, final_ent_list, ent_neighbors, rel_evt_idxs,
                      evt_neighbors, new_event_index, new_entity_event_index, new_entity_mask, new_entity_list,
                      new_entity_type):
-        # 在这里其实就变成200的嵌入了
-        # [16278,768]，就是一个初始的嵌入
+        # [16278,768]，是一个初始的嵌入
         r = self.init_rel if self.p.score_func != 'transe' else torch.cat([self.init_rel, -self.init_rel], dim=0)
         self.p.use_event = 1  # 暂时不用事件看看
         if syml == 'test':
@@ -1138,10 +1136,8 @@ class DCNE(KGEModel):
         # print(entity_emb.shape)
         # print(relation_emb.shape)
         # sub_emb	= torch.index_select(entity_emb, 0, sub)
-        # entity_emb应当直接包含final_ent_list中的每一个entity的embedding
         sub_emb = entity_emb[sub_index_list]
         rel_emb = torch.index_select(relation_emb, 0, rel)
-        # 这几个向量确实是密切相关的
 
         return sub_emb, rel_emb, entity_emb
 
@@ -1151,14 +1147,14 @@ class DCNE(KGEModel):
         return param
 
     def get_param_device(self,x,y):
-        param = Parameter(torch.Tensor(x, y)).cuda()  # 转换到gpu上
+        param = Parameter(torch.Tensor(x, y)).cuda()
         # torch.nn.init.xavier_uniform_(param.data)
-        xavier_normal_(param.data)  # 梯度爆炸，或者梯度消失了？
+        xavier_normal_(param.data)
         return param
-    def comp(self, path):#这里才是实现，静态方法可能只是一个抽取的方法，这里是继承和实现
-        rels_emb = self.relation_embedding[path]#三维的矩阵#[batch,path,embed],双塔的第一个塔
+    def comp(self, path):
+        rels_emb = self.relation_embedding[path]
         rels_e = self.relation_e[path]#[batch,path,embed]
-        rels_ie = self.relation_ie[path]#这两个没有区别，双塔的另一个塔
+        rels_ie = self.relation_ie[path]
         assert rels_emb.shape == torch.Size([path.shape[0], path.shape[1], self.relation_embedding.shape[1]])
         return rels_emb, rels_e, rels_ie
 
@@ -1186,7 +1182,7 @@ class DCNE(KGEModel):
         transt = self.embeddings[4](torch.LongTensor([0]).cuda())
         transt = transt[:, :self.rank], transt[:, self.rank:]
 
-        for rel_1_content in path:#这里就是每个path都过一遍的意思
+        for rel_1_content in path:#path都过一遍
             for rel_1 in rel_1_content:
                 rel_1_str = str(rel_1)
                 if rel_1_str in self.rule1_p2:  # [0]实体 [1]关系 [2]时间 [3]关系 [4] 1, dim =200
@@ -1194,7 +1190,7 @@ class DCNE(KGEModel):
                     for rel_2 in self.rule1_p2[rel_1_str]:
                         weight_r = self.rule1_p2[rel_1_str][rel_2]  # 数值
                         rel2_emb = self.embeddings[3](torch.LongTensor([int(rel_2)]).cuda())[0]
-                        rule += weight_r * torch.sum(torch.abs(rel1_emb - rel2_emb) ** 3)  # ？？
+                        rule += weight_r * torch.sum(torch.abs(rel1_emb - rel2_emb) ** 3)
                         rule_num += 1
 
         for rel_1_content in path:
@@ -1325,11 +1321,11 @@ class DCNE(KGEModel):
         head_e, head_ie = torch.chunk(tri_head, 2, dim=2)#分成两块
         tail_e, tail_ie = torch.chunk(tri_tail, 2, dim=2)
 
-        score_e = head_e - tail_e#transE?
+        score_e = head_e - tail_e#transE
         score_ie = head_ie - tail_ie
 
         score = torch.stack([score_e, score_ie], dim=0)#[2,batch,1,dim]
         score = score.norm(dim=0, p=self.pc)#？[batch,1,dim]
-        score = self.gamma.item() - score.sum(dim=2)##gamma是一个数，类似隔板？
+        score = self.gamma.item() - score.sum(dim=2)##gamma是一个数，类似隔板
 
         return score

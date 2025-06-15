@@ -197,12 +197,12 @@ class DataReader(object):
         if mode == "train":
             file = f"fuzzy_train_{length}hop"
         else:
-            file = f"fuzzy_{mode}_nhop"#就是所有hop的数据，1-hop，2-hop，3-hop，还有评价的结果
+            file = f"fuzzy_{mode}_nhop"
         data = []
         with open(os.path.join(data_path, file), "r") as f:
             for line in f:
                 tokens = line.strip().split("\t")
-                assert len(tokens) == 7#3+4，没有模糊度的时候就是3
+                assert len(tokens) == 7
                 rels = [int(i) for i in tokens[1].split(",")]  # str2id
                 data.append((int(tokens[0]), tuple(rels), int(tokens[2]),float(tokens[3]),float(tokens[4]),float(tokens[5]),float(tokens[6])))
 

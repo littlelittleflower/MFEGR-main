@@ -5,7 +5,7 @@ parser = argparse.ArgumentParser(description='Parser For Arguments',
 
 #换数据集的时候这个也要记得改参数
 parser.add_argument('-name', default='testrun', help='Set run name for saving/restoring models')
-parser.add_argument('-data', dest='dataset', default='D:\\Fuzzy_multi-hop_reasoning\\DCNE2-main\\MFEGR-main\\PQA\\data\\event_kg_rules\\event_graph', help='Dataset to use, default: FB15k-237')
+parser.add_argument('-data', dest='dataset', default='D:\\Fuzzy_multi-hop_reasoning\\MFEGR-main\\PQA\\data\\event_kg_rules\\event_graph', help='Dataset to use, default: FB15k-237')
 parser.add_argument('-model', dest='model', default='compgcn', help='Model Name')
 parser.add_argument('-score_func', dest='score_func', default='conve', help='Score Function for Link prediction')
 parser.add_argument('-opn', dest='opn', default='corr', help='Composition Operation to be used in CompGCN')
