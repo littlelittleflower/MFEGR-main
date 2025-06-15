@@ -31,9 +31,9 @@ def parse_args(args=None):
     parser.add_argument('--do_test', default=True,type=bool)
     parser.add_argument('--evaluate_train',default=True,type=bool, help='Evaluate on training data')
 
-    parser.add_argument('--data_path', type=str, default='D:\\Fuzzy_multi-hop_reasoning\\DCNE2-main\\MFEGR-main\\PQA\\data\\event_kg_rules')
+    parser.add_argument('--data_path', type=str, default='D:\\Fuzzy_multi-hop_reasoning\\MFEGR-main\\PQA\\data\\event_kg_rules')
     parser.add_argument('--rules_path', type=str,
-                        default='D:\\Fuzzy_multi-hop_reasoning\\DCNE2-main\\MFEGR-main\\PQA\\data\\ace_2005\\rules')
+                        default='D:\\Fuzzy_multi-hop_reasoning\\MFEGR-main\\PQA\\data\\event_kg\\rules')
 
 
     parser.add_argument('--adv_vanish', default=False,type=bool)
