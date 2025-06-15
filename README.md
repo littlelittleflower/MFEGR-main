@@ -3,8 +3,11 @@ Multi-hop Fuzzy Event Knowledge Graph Reasoning with Event Soft Logical Rules Gu
 
 ## Dataset
 The dataset can be downloaded from:
+
 ACE_2005: https://catalog.ldc.upenn.edu/LDC2006T06
+
 MF_ERE: https://catalog.ldc.upenn.edu/LDC2015E29 , https://catalog.ldc.upenn.edu/LDC2015E68 , https://catalog.ldc.upenn.edu/LDC2015E78
+
 EventKG: https://eventkg.l3s.uni-hannover.de/data.html
 
 process it to the directory ./PQA/data.
